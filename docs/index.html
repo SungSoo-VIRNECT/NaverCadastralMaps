@@ -31,7 +31,7 @@
                 <input id="cadastral" type="button" value="지적도" class="control-btn" />
             </div>
         </div>
-        <!-- <script>
+        <script>
         navigator.geolocation.getCurrentPosition(function (position) {
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
@@ -43,6 +43,18 @@
                 zoom: 18,
                 mapTypeControlOptions: {
                     style: naver.maps.MapTypeControlStyle.DROPDOWN
+                }
+            });
+
+            var marker = new naver.maps.Marker({
+                position: naver.maps.LatLng(lat, lon),
+                map: map,
+                icon: {
+                    url: 'https://github.com/SungSoo-VIRNECT/NaverCadastralMaps/blob/main/docs/img/example/brown.png', //50, 68 크기의 원본 이미지
+                    size: new naver.maps.Size(25, 34),
+                    scaledSize: new naver.maps.Size(25, 34),
+                    origin: new naver.maps.Point(0, 0),
+                    anchor: new naver.maps.Point(12, 34)
                 }
             });
 
@@ -79,9 +91,9 @@
             });
         });
 
-    </script> -->
+    </script>
 
-        <script>
+        <!-- <script>
 
 
             var map = new naver.maps.Map('map', {
@@ -134,7 +146,7 @@
             naver.maps.Event.once(map, 'init', function () {
                 cadastralLayer.setMap(map);
             });
-        </script>
+        </script> -->
 </body>
 
 </html>
