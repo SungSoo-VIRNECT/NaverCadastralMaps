@@ -31,65 +31,109 @@
                 <input id="cadastral" type="button" value="지적도" class="control-btn" />
             </div>
         </div>
-        <script>
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var lat = position.coords.latitude;
-                var lon = position.coords.longitude;
+        <!-- <script>
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
 
-                // Initialize the map using the user's current location
-                var map = new naver.maps.Map('map', {
-                    center: new naver.maps.LatLng(lat, lon), // Center the map on the user's location
-                    mapTypeControl: true,
-                    zoom: 18,
-                    mapTypeControlOptions: {
-                        style: naver.maps.MapTypeControlStyle.DROPDOWN
-                    }
-                });
-                var marker = new naver.maps.Marker({
-                    position: new naver.maps.LatLng(lat, lon),
-                    map: map,
-                    icon: {
-                        url: 'https://github.com/SungSoo-VIRNECT/NaverCadastralMaps/blob/main/docs/img/example/brown.png', //50, 68 크기의 원본 이미지
-                        size: new naver.maps.Size(50, 34),
-                        scaledSize: new naver.maps.Size(25, 34),
-                        origin: new naver.maps.Point(0, 0),
-                        anchor: new naver.maps.Point(12, 34)
-                    }
-                });
-
-                var cadastralLayer = new naver.maps.CadastralLayer();
-                var btn = document.getElementById('cadastral');
-
-                // Handle the change event for cadastral layer
-                naver.maps.Event.addListener(map, 'cadastralLayer_changed', function () {
-                    if (cadastralLayer.getMap()) {
-                        btn.classList.add('control-on');
-                        btn.value = '지적도 끄기';  // Button text for turning off cadastral layer
-                    } else {
-                        btn.classList.remove('control-on');
-                        btn.value = '지적도 켜기';  // Button text for turning on cadastral layer
-                    }
-                });
-
-                // Toggle cadastral layer visibility on button click
-                btn.addEventListener('click', function (e) {
-                    e.preventDefault();
-
-                    if (cadastralLayer.getMap()) {
-                        cadastralLayer.setMap(null);
-                        btn.value = '지적도 켜기';  // Update button text
-                    } else {
-                        cadastralLayer.setMap(map);
-                        btn.value = '지적도 끄기';  // Update button text
-                    }
-                });
-
-                // Automatically set cadastral layer when the map is initialized
-                naver.maps.Event.once(map, 'init', function () {
-                    cadastralLayer.setMap(map);
-                });
+            // Initialize the map using the user's current location
+            var map = new naver.maps.Map('map', {
+                center: new naver.maps.LatLng(lat, lon), // Center the map on the user's location
+                mapTypeControl: true,
+                zoom: 18,
+                mapTypeControlOptions: {
+                    style: naver.maps.MapTypeControlStyle.DROPDOWN
+                }
             });
 
+            var cadastralLayer = new naver.maps.CadastralLayer();
+            var btn = document.getElementById('cadastral');
+
+            // Handle the change event for cadastral layer
+            naver.maps.Event.addListener(map, 'cadastralLayer_changed', function () {
+                if (cadastralLayer.getMap()) {
+                    btn.classList.add('control-on');
+                    btn.value = '지적도 끄기';  // Button text for turning off cadastral layer
+                } else {
+                    btn.classList.remove('control-on');
+                    btn.value = '지적도 켜기';  // Button text for turning on cadastral layer
+                }
+            });
+
+            // Toggle cadastral layer visibility on button click
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                if (cadastralLayer.getMap()) {
+                    cadastralLayer.setMap(null);
+                    btn.value = '지적도 켜기';  // Update button text
+                } else {
+                    cadastralLayer.setMap(map);
+                    btn.value = '지적도 끄기';  // Update button text
+                }
+            });
+
+            // Automatically set cadastral layer when the map is initialized
+            naver.maps.Event.once(map, 'init', function () {
+                cadastralLayer.setMap(map);
+            });
+        });
+
+    </script> -->
+
+        <script>
+
+
+            var map = new naver.maps.Map('map', {
+                center: new naver.maps.LatLng(35.189498, 127.622913),
+                mapTypeControl: true,
+                zoom: 18,
+                mapTypeControlOptions: {
+                    style: naver.maps.MapTypeControlStyle.DROPDOWN
+                }
+            });
+            
+            var marker = new naver.maps.Marker({
+                position: naver.maps.LatLng(35.189498, 127.622913),
+                map: map,
+                icon: {
+                    url: 'https://github.com/SungSoo-VIRNECT/NaverCadastralMaps/blob/main/docs/img/example/brown.png', //50, 68 크기의 원본 이미지
+                    size: new naver.maps.Size(25, 34),
+                    scaledSize: new naver.maps.Size(25, 34),
+                    origin: new naver.maps.Point(0, 0),
+                    anchor: new naver.maps.Point(12, 34)
+                }
+            });
+
+
+            var cadastralLayer = new naver.maps.CadastralLayer();
+            var btn = document.getElementById('cadastral');
+
+            naver.maps.Event.addListener(map, 'cadastralLayer_changed', function () {
+                if (cadastralLayer.getMap()) {
+                    btn.classList.add('control-on');
+                    btn.value = '지적도 끄기';
+                } else {
+                    btn.classList.remove('control-on');
+                    btn.value = '지적도 켜기';
+                }
+            });
+
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                if (cadastralLayer.getMap()) {
+                    cadastralLayer.setMap(null);
+                    btn.value = '지적도 켜기';
+                } else {
+                    cadastralLayer.setMap(map);
+                    btn.value = '지적도 끄기';
+                }
+            });
+
+            naver.maps.Event.once(map, 'init', function () {
+                cadastralLayer.setMap(map);
+            });
         </script>
 </body>
 
