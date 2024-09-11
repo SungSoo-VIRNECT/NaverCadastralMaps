@@ -29,8 +29,34 @@
         <div id="map" style="width:100%;height:900px;">
             <div class="buttons">
                 <input id="cadastral" type="button" value="지적도" class="control-btn" />
+                <button id="openCameraBtn">카메라 열기</button>
             </div>
         </div>
+        <h1>카메라 스트림 열기</h1>
+
+        <!-- 카메라 열기 버튼 -->
+        
+    
+        <!-- 실시간 비디오를 보여줄 요소 -->
+        <video id="video" width="600" height="400" autoplay></video>
+    
+        <script>
+            // 버튼과 비디오 요소 가져오기
+            const openCameraBtn = document.getElementById('openCameraBtn');
+            const video = document.getElementById('video');
+    
+            // 카메라 열기 버튼 클릭 시 실행될 함수
+            openCameraBtn.addEventListener('click', async function() {
+                try {
+                    // 카메라 스트림 열기
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    // 비디오 요소에 스트림 설정
+                    video.srcObject = stream;
+                } catch (error) {
+                    console.error("카메라를 열 수 없습니다:", error);
+                }
+            });
+        </script>
         <script>
         navigator.geolocation.getCurrentPosition(function (position) {
             var lat = position.coords.latitude;
