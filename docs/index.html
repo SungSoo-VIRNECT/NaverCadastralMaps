@@ -1,59 +1,86 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=83bfuniegk&submodules=panorama,geocoder,drawing,visualization"></script>
+    <script type="text/javascript"
+        src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=83bfuniegk&submodules=panorama,geocoder,drawing,visualization"></script>
     <style type="text/css">
-        #wrap .buttons { position: absolute; top: 0; left: 0; z-index: 1000; padding: 5px; }
-        #wrap .buttons .control-btn { margin: 0 5px 5px 0; }
-        #map { width: 100%; height: 600px; }
+        #wrap .buttons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 5px;
+        }
+
+        #wrap .buttons .control-btn {
+            margin: 0 5px 5px 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 600px;
+        }
     </style>
 </head>
+
 <body>
     <div id="wrap" class="section">
         <div id="map" style="width:100%;height:900px;">
-        <div class="buttons">
-            <input id="cadastral" type="button" value="지적도" class="control-btn" />
+            <div class="buttons">
+                <input id="cadastral" type="button" value="지적도" class="control-btn" />
+            </div>
         </div>
-    </div>
 
-    <script>
-        var map = new naver.maps.Map('map', {
-            center: new naver.maps.LatLng(35.189498, 127.622913),
-            mapTypeControl: true,
-            zoom: 18,
-            mapTypeControlOptions: {
-                style: naver.maps.MapTypeControlStyle.DROPDOWN
-            }
-        });
+        <script>
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
 
-        var cadastralLayer = new naver.maps.CadastralLayer();
-        var btn = document.getElementById('cadastral');
+                // Initialize the map using the user's current location
+                var map = new naver.maps.Map('map', {
+                    center: new naver.maps.LatLng(lat, lon), // Center the map on the user's location
+                    mapTypeControl: true,
+                    zoom: 18,
+                    mapTypeControlOptions: {
+                        style: naver.maps.MapTypeControlStyle.DROPDOWN
+                    }
+                });
 
-        naver.maps.Event.addListener(map, 'cadastralLayer_changed', function() {
-            if (cadastralLayer.getMap()) {
-                btn.classList.add('control-on');
-                btn.value = '지적도 끄기';
-            } else {
-                btn.classList.remove('control-on');
-                btn.value = '지적도 켜기';
-            }
-        });
+                var cadastralLayer = new naver.maps.CadastralLayer();
+                var btn = document.getElementById('cadastral');
 
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
+                // Handle the change event for cadastral layer
+                naver.maps.Event.addListener(map, 'cadastralLayer_changed', function () {
+                    if (cadastralLayer.getMap()) {
+                        btn.classList.add('control-on');
+                        btn.value = '지적도 끄기';  // Button text for turning off cadastral layer
+                    } else {
+                        btn.classList.remove('control-on');
+                        btn.value = '지적도 켜기';  // Button text for turning on cadastral layer
+                    }
+                });
 
-            if (cadastralLayer.getMap()) {
-                cadastralLayer.setMap(null);
-                btn.value = '지적도 켜기';
-            } else {
-                cadastralLayer.setMap(map);
-                btn.value = '지적도 끄기';
-            }
-        });
+                // Toggle cadastral layer visibility on button click
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
 
-        naver.maps.Event.once(map, 'init', function() {
-            cadastralLayer.setMap(map);
-        });
-    </script>
+                    if (cadastralLayer.getMap()) {
+                        cadastralLayer.setMap(null);
+                        btn.value = '지적도 켜기';  // Update button text
+                    } else {
+                        cadastralLayer.setMap(map);
+                        btn.value = '지적도 끄기';  // Update button text
+                    }
+                });
+
+                // Automatically set cadastral layer when the map is initialized
+                naver.maps.Event.once(map, 'init', function () {
+                    cadastralLayer.setMap(map);
+                });
+            });
+
+        </script>
 </body>
+
 </html>
