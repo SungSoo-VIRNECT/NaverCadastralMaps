@@ -1,28 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Naver Cadastral Map</title>
-    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=83bfuniegk&submodules=panorama,geocoder,drawing,visualization"></script>
+    <script type="text/javascript"
+        src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=83bfuniegk&submodules=panorama,geocoder,drawing,visualization"></script>
     <style type="text/css">
-        #wrap {
-            position: relative;
-            width: 820px;
-            height: 820px;
-            margin: 0 auto;
+        /* Center the content inside the Unity WebView */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            /* Enables flexbox layout */
+            justify-content: center;
+            /* Horizontal centering */
+            align-items: center;
+            /* Vertical centering */
+            overflow: hidden;
+            /* Prevents scrolling */
+            background-color: #f0f0f0;
+            /* Optional: Add a background color to body */
         }
 
-        #wrap .buttons {
+        #wrap {
+            width: 820px;
+            /* Set width of the wrap container */
+            height: 820px;
+            /* Set height of the wrap container */
+            display: flex;
+            /* Flexbox to center content inside the container */
+            justify-content: center;
+            /* Horizontal centering inside the wrap */
+            align-items: center;
+            /* Vertical centering inside the wrap */
+            background-color: white;
+            /* Background color for the wrap */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            /* Optional: Add shadow to wrap */
+            position: relative;
+            /* Required for positioning absolute elements inside */
+        }
+
+        .buttons {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 10px;
+            left: 10px;
             z-index: 1000;
             padding: 5px;
         }
 
-        #wrap .buttons .control-btn {
+        .buttons .control-btn {
             margin: 0 5px 5px 0;
         }
 
@@ -34,82 +63,73 @@
 </head>
 
 <body>
-    <div id="wrap" class="section">
+    <div id="wrap">
         <div id="map">
             <div class="buttons">
                 <input id="cadastral" type="button" value="지적도" class="control-btn" />
-                
             </div>
         </div>
     </div>
 
     <script>
-        // 사용자의 현재 위치를 기반으로 지도를 초기화하는 함수
-        function initMapWithCurrentLocation() {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var lat = position.coords.latitude;
-                var lon = position.coords.longitude;
+        // Initialize the map with default location
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
 
-                // 지도 초기화
-                var map = new naver.maps.Map('map', {
-                    center: new naver.maps.LatLng(lat, lon), // 사용자의 현재 위치를 중심으로 설정
-                    // mapTypeControl: true,
-                    zoom: 24,
-                    // mapTypeControlOptions: {
-                    //     style: naver.maps.MapTypeControlStyle.DROPDOWN
-                    // }
-                });
-
-                // 마커 추가
-                var marker = new naver.maps.Marker({
-                    position: new naver.maps.LatLng(lat, lon),
-                    map: map,
-                    icon: {
-                        url: 'https://github.com/SungSoo-VIRNECT/NaverCadastralMaps/blob/main/docs/img/example/brown.png',
-                        size: new naver.maps.Size(25, 34),
-                        scaledSize: new naver.maps.Size(25, 34),
-                        origin: new naver.maps.Point(0, 0),
-                        anchor: new naver.maps.Point(12, 34)
-                    }
-                });
-
-                // 지적도 레이어 토글을 위한 변수 및 이벤트 핸들러 설정
-                var cadastralLayer = new naver.maps.CadastralLayer();
-                var btn = document.getElementById('cadastral');
-
-                naver.maps.Event.addListener(map, 'cadastralLayer_changed', function () {
-                    if (cadastralLayer.getMap()) {
-                        btn.classList.add('control-on');
-                        btn.value = '지적도 끄기';
-                    } else {
-                        btn.classList.remove('control-on');
-                        btn.value = '지적도 켜기';
-                    }
-                });
-
-                btn.addEventListener('click', function (e) {
-                    e.preventDefault();
-
-                    if (cadastralLayer.getMap()) {
-                        cadastralLayer.setMap(null);
-                        btn.value = '지적도 켜기';
-                    } else {
-                        cadastralLayer.setMap(map);
-                        btn.value = '지적도 끄기';
-                    }
-                });
-
-                naver.maps.Event.once(map, 'init', function () {
-                    cadastralLayer.setMap(map);
-                });
-            }, function (error) {
-                console.error("Error getting location: ", error);
-                alert("현재 위치를 가져올 수 없습니다. 위치 권한을 허용해 주세요.");
+            // Initialize the map using the user's current location
+            var map = new naver.maps.Map('map', {
+                center: new naver.maps.LatLng(lat, lon), // Center the map on the user's location
+                mapTypeControl: true,
+                zoom: 18,
+                mapTypeControlOptions: {
+                    style: naver.maps.MapTypeControlStyle.DROPDOWN
+                }
             });
-        }
 
-        // 현재 위치로 지도 초기화
-        initMapWithCurrentLocation();
+            // Add a marker at the map center
+            var marker = new naver.maps.Marker({
+                position: new naver.maps.LatLng(lat, lon),
+                map: map,
+                icon: {
+                    url: 'https://github.com/SungSoo-VIRNECT/NaverCadastralMaps/blob/main/docs/img/example/brown.png', // 50, 68 original image size
+                    size: new naver.maps.Size(25, 34),
+                    scaledSize: new naver.maps.Size(25, 34),
+                    origin: new naver.maps.Point(0, 0),
+                    anchor: new naver.maps.Point(12, 34)
+                }
+            });
+
+            // Handle cadastral layer toggling
+            var cadastralLayer = new naver.maps.CadastralLayer();
+            var btn = document.getElementById('cadastral');
+
+            naver.maps.Event.addListener(map, 'cadastralLayer_changed', function () {
+                if (cadastralLayer.getMap()) {
+                    btn.classList.add('control-on');
+                    btn.value = '지적도 끄기';
+                } else {
+                    btn.classList.remove('control-on');
+                    btn.value = '지적도 켜기';
+                }
+            });
+
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                if (cadastralLayer.getMap()) {
+                    cadastralLayer.setMap(null);
+                    btn.value = '지적도 켜기';
+                } else {
+                    cadastralLayer.setMap(map);
+                    btn.value = '지적도 끄기';
+                }
+            });
+
+            naver.maps.Event.once(map, 'init', function () {
+                cadastralLayer.setMap(map);
+            });
+        });
     </script>
 </body>
 
